@@ -1,320 +1,351 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Flappy Bird + Encryptor</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f0;
-      text-align: center;
-    }
-
-    #gameCanvas {
-      background: skyblue;
-      display: block;
-      margin: 0 auto;
-    }
-
-    #score {
-      font-size: 20px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-
-    #encryptorSection {
-      display: none;
-      padding: 20px;
-    }
-
-    textarea {
-      width: 90%;
-      height: 120px;
-      font-size: 16px;
-      padding: 10px;
-      margin-bottom: 10px;
-    }
-
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin: 5px;
-    }
-
-    .output {
-      background: #fff;
-      padding: 10px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-    }
-
-    button {
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <canvas id="gameCanvas" width="400" height="600"></canvas>
-  <div id="score">Score: 0</div>
-
-  <div id="encryptorSection">
-    <h2>🔐 Offline Password-Based Encryptor</h2>
-    <label for="password">Password:</label><br />
-    <input type="password" id="password" placeholder="Enter password" />
-
-    <br /><br />
-    <label for="text">Message:</label><br />
-    <textarea id="text"></textarea>
-
-    <br />
-    <button onclick="encrypt()">Encrypt</button>
-    <button onclick="decrypt()">Decrypt</button>
-    <button onclick="copyToClipboard()">📋 Copy to Clipboard</button>
-
-    <h3>Output:</h3>
-    <div class="output" id="outputBox"></div>
-
-    <br>
-    <button onclick="goBackToGame()">⬅️ Back to Game</button>
-  </div>
-
-  <script>
-    // FLAPPY BIRD SECTION
-    (() => {
-      const canvas = document.getElementById("gameCanvas");
-      const ctx = canvas.getContext("2d");
-
-      function adjustCanvasDPI() {
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = 400 * dpr;
-        canvas.height = 600 * dpr;
-        canvas.style.width = "400px";
-        canvas.style.height = "600px";
-        ctx.scale(dpr, dpr);
-      }
-      adjustCanvasDPI();
-
-      const bird = {
-        x: 50,
-        y: 150,
-        radius: 12,
-        gravity: 0.6,
-        lift: -10,
-        velocity: 0,
-        maxVelocity: 12,
-      };
-
-      const pipeWidth = 60;
-      const pipeGap = 150;
-      let pipes = [];
-      let frameCount = 0;
-      let score = 0;
-      let gameOver = false;
-
-      const scoreEl = document.getElementById("score");
-
-      function resetGame() {
-        bird.y = 150;
-        bird.velocity = 0;
-        pipes = [];
-        frameCount = 0;
-        score = 0;
-        gameOver = false;
-        scoreEl.textContent = "Score: 0";
+<  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flappy Bird + Encryptor</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f0f0f0;
+        text-align: center;
       }
 
-      function drawBird() {
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = "orange";
-        ctx.beginPath();
-        ctx.moveTo(bird.x + bird.radius + 5, bird.y);
-        ctx.lineTo(bird.x + bird.radius - 5, bird.y - 5);
-        ctx.lineTo(bird.x + bird.radius - 5, bird.y + 5);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.fillStyle = "black";
-        ctx.beginPath();
-        ctx.arc(bird.x + 5, bird.y - 5, 3, 0, Math.PI * 2);
-        ctx.fill();
+      #gameCanvas {
+        background: skyblue;
+        display: block;
+        margin: 0 auto;
       }
 
-      function drawPipe(pipe) {
-        ctx.fillStyle = "#228B22";
-        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
-        ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height / (window.devicePixelRatio || 1) - pipe.top - pipeGap);
+      #score {
+        font-size: 20px;
+        margin-top: 10px;
+        cursor: pointer;
       }
 
-      function update() {
-        if (gameOver) return;
+      #encryptorSection {
+        display: none;
+        padding: 20px;
+      }
 
-        frameCount++;
-        bird.velocity += bird.gravity;
-        if (bird.velocity > bird.maxVelocity) bird.velocity = bird.maxVelocity;
-        bird.y += bird.velocity;
+      textarea {
+        width: 90%;
+        height: 120px;
+        font-size: 16px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
 
-        if (bird.y + bird.radius > canvas.height / (window.devicePixelRatio || 1)) {
-          bird.y = canvas.height / (window.devicePixelRatio || 1) - bird.radius;
-          gameOver = true;
+      input, button {
+        padding: 10px;
+        font-size: 16px;
+        margin: 5px;
+      }
+
+      .output {
+        background: #fff;
+        padding: 10px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        word-break: break-word;
+      }
+
+      button {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="score">Score: 0</div>
+
+    <div id="encryptorSection">
+      <h2>🔐 Offline Password-Based Encryptor</h2>
+      <label for="password">Password:</label><br />
+      <input type="password" id="password" placeholder="Enter password" />
+
+      <br /><br />
+      <label for="text">Message:</label><br />
+      <textarea id="text"></textarea>
+
+      <br />
+      <button onclick="encrypt()">Encrypt</button>
+      <button onclick="decrypt()">Decrypt</button>
+      <button onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+
+      <h3>Output:</h3>
+      <div class="output" id="outputBox"></div>
+
+      <br>
+      <button onclick="goBackToGame()">⬅️ Back to Game</button>
+    </div>
+
+    <script>
+      // FLAPPY BIRD SECTION
+      (() => {
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        function adjustCanvasDPI() {
+          const dpr = window.devicePixelRatio || 1;
+          canvas.width = 400 * dpr;
+          canvas.height = 600 * dpr;
+          canvas.style.width = "400px";
+          canvas.style.height = "600px";
+          ctx.scale(dpr, dpr);
         }
-        if (bird.y - bird.radius < 0) {
-          bird.y = bird.radius;
+        adjustCanvasDPI();
+
+        const bird = {
+          x: 50,
+          y: 150,
+          radius: 12,
+          gravity: 0.6,
+          lift: -10,
+          velocity: 0,
+          maxVelocity: 12,
+        };
+
+        const pipeWidth = 60;
+        const pipeGap = 150;
+        let pipes = [];
+        let frameCount = 0;
+        let score = 0;
+        let gameOver = false;
+
+        const scoreEl = document.getElementById("score");
+
+        function resetGame() {
+          bird.y = 150;
           bird.velocity = 0;
+          pipes = [];
+          frameCount = 0;
+          score = 0;
+          gameOver = false;
+          scoreEl.textContent = "Score: 0";
         }
 
-        if (frameCount % 90 === 0) {
-          const maxHeight = canvas.height / (window.devicePixelRatio || 1) - pipeGap - 50;
-          const topHeight = Math.floor(Math.random() * maxHeight) + 25;
-          pipes.push({ x: canvas.width / (window.devicePixelRatio || 1), top: topHeight, passed: false });
+        function drawBird() {
+          ctx.fillStyle = "yellow";
+          ctx.beginPath();
+          ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = "orange";
+          ctx.beginPath();
+          ctx.moveTo(bird.x + bird.radius + 5, bird.y);
+          ctx.lineTo(bird.x + bird.radius - 5, bird.y - 5);
+          ctx.lineTo(bird.x + bird.radius - 5, bird.y + 5);
+          ctx.closePath();
+          ctx.fill();
+
+          ctx.fillStyle = "black";
+          ctx.beginPath();
+          ctx.arc(bird.x + 5, bird.y - 5, 3, 0, Math.PI * 2);
+          ctx.fill();
         }
 
-        for (let i = 0; i < pipes.length; i++) {
-          const pipe = pipes[i];
-          pipe.x -= 3;
+        function drawPipe(pipe) {
+          ctx.fillStyle = "#228B22";
+          ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
+          ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height / (window.devicePixelRatio || 1) - pipe.top - pipeGap);
+        }
 
-          if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
-            if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.top + pipeGap) {
-              gameOver = true;
+        function update() {
+          if (gameOver) return;
+
+          frameCount++;
+          bird.velocity += bird.gravity;
+          if (bird.velocity > bird.maxVelocity) bird.velocity = bird.maxVelocity;
+          bird.y += bird.velocity;
+
+          if (bird.y + bird.radius > canvas.height / (window.devicePixelRatio || 1)) {
+            bird.y = canvas.height / (window.devicePixelRatio || 1) - bird.radius;
+            gameOver = true;
+          }
+          if (bird.y - bird.radius < 0) {
+            bird.y = bird.radius;
+            bird.velocity = 0;
+          }
+
+          if (frameCount % 90 === 0) {
+            const maxHeight = canvas.height / (window.devicePixelRatio || 1) - pipeGap - 50;
+            const topHeight = Math.floor(Math.random() * maxHeight) + 25;
+            pipes.push({ x: canvas.width / (window.devicePixelRatio || 1), top: topHeight, passed: false });
+          }
+
+          for (let i = 0; i < pipes.length; i++) {
+            const pipe = pipes[i];
+            pipe.x -= 3;
+
+            if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
+              if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.top + pipeGap) {
+                gameOver = true;
+              }
+            }
+
+            if (!pipe.passed && pipe.x + pipeWidth < bird.x - bird.radius) {
+              pipe.passed = true;
+              score++;
+              scoreEl.textContent = "Score: " + score;
             }
           }
 
-          if (!pipe.passed && pipe.x + pipeWidth < bird.x - bird.radius) {
-            pipe.passed = true;
-            score++;
-            scoreEl.textContent = "Score: " + score;
+          pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
+        }
+
+        function draw() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawBird();
+          pipes.forEach(drawPipe);
+
+          if (gameOver) {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.font = "48px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Game Over", canvas.width / 2 / (window.devicePixelRatio || 1), canvas.height / 2 / (window.devicePixelRatio || 1) - 20);
+            ctx.font = "24px Arial";
+            ctx.fillText("Tap to Restart", canvas.width / 2 / (window.devicePixelRatio || 1), canvas.height / 2 / (window.devicePixelRatio || 1) + 20);
           }
         }
 
-        pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
+        function loop() {
+          update();
+          draw();
+          requestAnimationFrame(loop);
+        }
+
+        function flap() {
+          if (gameOver) {
+            resetGame();
+          } else {
+            bird.velocity = bird.lift;
+          }
+        }
+
+        canvas.addEventListener("click", flap);
+        canvas.addEventListener("touchstart", e => {
+          e.preventDefault();
+          flap();
+        }, { passive: false });
+
+        // Switch to Encryptor on Score Click (if game over)
+        scoreEl.addEventListener("click", () => {
+          if (gameOver) {
+            document.getElementById("gameCanvas").style.display = "none";
+            document.getElementById("score").style.display = "none";
+            document.getElementById("encryptorSection").style.display = "block";
+          }
+        });
+
+        resetGame();
+        loop();
+      })();
+
+      // ENCRYPTOR SECTION
+      const fixedPassword = "money!";
+
+      // Helper: convert Uint8Array to base64 string
+      function uint8ArrayToBase64(bytes) {
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
       }
 
-      function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawBird();
-        pipes.forEach(drawPipe);
+      // Helper: convert base64 string to Uint8Array
+      function base64ToUint8Array(base64) {
+        const binary = atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return bytes;
+      }
 
-        if (gameOver) {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.fillStyle = "white";
-          ctx.font = "48px Arial";
-          ctx.textAlign = "center";
-          ctx.fillText("Game Over", canvas.width / 2 / (window.devicePixelRatio || 1), canvas.height / 2 / (window.devicePixelRatio || 1) - 20);
-          ctx.font = "24px Arial";
-          ctx.fillText("Tap to Restart", canvas.width / 2 / (window.devicePixelRatio || 1), canvas.height / 2 / (window.devicePixelRatio || 1) + 20);
+      // XOR encrypt/decrypt on Uint8Array data with password Uint8Array key
+      function xorEncryptDecryptBytes(dataBytes, keyBytes) {
+        const output = new Uint8Array(dataBytes.length);
+        for (let i = 0; i < dataBytes.length; i++) {
+          output[i] = dataBytes[i] ^ keyBytes[i % keyBytes.length];
+        }
+        return output;
+      }
+
+      function checkPassword(inputPassword) {
+        return inputPassword === fixedPassword;
+      }
+
+      function encrypt() {
+        const text = document.getElementById("text").value;
+        const password = document.getElementById("password").value;
+
+        if (!password || !checkPassword(password)) {
+          alert("Incorrect or missing password.");
+          return;
+        }
+        if (!text) {
+          alert("Please enter a message to encrypt.");
+          return;
+        }
+
+        const encoder = new TextEncoder();
+        const dataBytes = encoder.encode(text);
+        const keyBytes = encoder.encode(fixedPassword);
+
+        const encryptedBytes = xorEncryptDecryptBytes(dataBytes, keyBytes);
+        const encoded = uint8ArrayToBase64(encryptedBytes);
+
+        document.getElementById("outputBox").innerText = encoded;
+      }
+
+      function decrypt() {
+        const text = document.getElementById("text").value;
+        const password = document.getElementById("password").value;
+
+        if (!password || !checkPassword(password)) {
+          alert("Incorrect or missing password.");
+          return;
+        }
+        if (!text) {
+          alert("Please enter a message to decrypt.");
+          return;
+        }
+
+        try {
+          const encryptedBytes = base64ToUint8Array(text);
+          const encoder = new TextEncoder();
+          const keyBytes = encoder.encode(fixedPassword);
+
+          const decryptedBytes = xorEncryptDecryptBytes(encryptedBytes, keyBytes);
+          const decoder = new TextDecoder();
+          const decryptedText = decoder.decode(decryptedBytes);
+
+          document.getElementById("outputBox").innerText = decryptedText;
+        } catch (e) {
+          document.getElementById("outputBox").innerText = "❌ Decryption failed.";
         }
       }
 
-      function loop() {
-        update();
-        draw();
-        requestAnimationFrame(loop);
+      function copyToClipboard() {
+        const text = document.getElementById("outputBox").innerText;
+        navigator.clipboard.writeText(text)
+          .then(() => alert("Copied to clipboard!"))
+          .catch(err => alert("Failed to copy: " + err));
       }
 
-      function flap() {
-        if (gameOver) {
-          resetGame();
-        } else {
-          bird.velocity = bird.lift;
-        }
+      function goBackToGame() {
+        document.getElementById("encryptorSection").style.display = "none";
+        document.getElementById("gameCanvas").style.display = "block";
+        document.getElementById("score").style.display = "block";
       }
-
-      canvas.addEventListener("click", flap);
-      canvas.addEventListener("touchstart", e => {
-        e.preventDefault();
-        flap();
-      }, { passive: false });
-
-      // Switch to Encryptor on Score Click (if game over)
-      scoreEl.addEventListener("click", () => {
-        if (gameOver) {
-          document.getElementById("gameCanvas").style.display = "none";
-          document.getElementById("score").style.display = "none";
-          document.getElementById("encryptorSection").style.display = "block";
-        }
-      });
-
-      resetGame();
-      loop();
-    })();
-
-    // ENCRYPTOR SECTION
-    const fixedPassword = "money!";
-
-    function xorEncryptDecrypt(input, password) {
-      let output = "";
-      for (let i = 0; i < input.length; i++) {
-        const charCode = input.charCodeAt(i) ^ password.charCodeAt(i % password.length);
-        output += String.fromCharCode(charCode);
-      }
-      return output;
-    }
-
-    function checkPassword(inputPassword) {
-      return inputPassword === fixedPassword;
-    }
-
-    function encrypt() {
-      const text = document.getElementById("text").value;
-      const password = document.getElementById("password").value;
-
-      if (!password || !checkPassword(password)) {
-        alert("Incorrect or missing password.");
-        return;
-      }
-      if (!text) {
-        alert("Please enter a message to encrypt.");
-        return;
-      }
-
-      const encrypted = xorEncryptDecrypt(text, fixedPassword);
-      const encoded = btoa(encrypted);
-      document.getElementById("outputBox").innerText = encoded;
-    }
-
-    function decrypt() {
-      const text = document.getElementById("text").value;
-      const password = document.getElementById("password").value;
-
-      if (!password || !checkPassword(password)) {
-        alert("Incorrect or missing password.");
-        return;
-      }
-      if (!text) {
-        alert("Please enter a message to decrypt.");
-        return;
-      }
-
-      try {
-        const decoded = atob(text);
-        const decrypted = xorEncryptDecrypt(decoded, fixedPassword);
-        document.getElementById("outputBox").innerText = decrypted;
-      } catch (e) {
-        document.getElementById("outputBox").innerText = "❌ Decryption failed.";
-      }
-    }
-
-    function copyToClipboard() {
-      const text = document.getElementById("outputBox").innerText;
-      navigator.clipboard.writeText(text)
-        .then(() => alert("Copied to clipboard!"))
-        .catch(err => alert("Failed to copy: " + err));
-    }
-
-    function goBackToGame() {
-      document.getElementById("encryptorSection").style.display = "none";
-      document.getElementById("gameCanvas").style.display = "block";
-      document.getElementById("score").style.display = "block";
-    }
-  </script>
-</body>
-</html>
+    </script>
+  </body>
+  </html>
