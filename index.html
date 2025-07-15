@@ -126,10 +126,9 @@
       const p = t.split('|');
       if(p.length !== 3) throw new Error("Wrong format.");
       
-      // MODIFIED LINES BELOW: Added .trim() to each part
-      const s1 = p[0].split(':')[1].trim();
-      const s2 = p[1].split(':')[1].trim();
-      const s3 = p[2].split(':')[1].trim();
+      const s1 = p[0].split(':')[1].trim(); // Added .trim()
+      const s2 = p[1].split(':')[1].trim(); // Added .trim()
+      const s3 = p[2].split(':')[1].trim(); // Added .trim()
 
       const s = new Uint8Array(await g(s1));
       const i = new Uint8Array(await g(s2));
@@ -287,4 +286,5 @@
 </script>
 </body>
 </html>
+
 
