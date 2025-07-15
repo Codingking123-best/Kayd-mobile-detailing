@@ -30,23 +30,14 @@
 
 <script>
 (async function(){
-  async function m(s){
-    const e=new TextEncoder();
-    const d=e.encode(s);
-    const b=await crypto.subtle.digest("SHA-256",d);
+  async function getHash(p){
+    const e = new TextEncoder();
+    const d = e.encode(p);
+    const b = await crypto.subtle.digest("SHA-256", d);
     return Array.from(new Uint8Array(b)).map(c=>c.toString(16).padStart(2,"0")).join("");
   }
 
-  // New hash for password "K!ngJ@mes#1"
-  const n="ae67cfa019afb2b15ef0c9e578e0409668feb4bbde37201a59ac668fe7ce18ed";
-
-  async function o(p){
-    if(!p) return false;
-    const h = await m(p);
-    return h === n;
-  }
-
-  const r = {
+  const rateLimit = {
     max:5,
     time:60000,
     t:[],
@@ -90,13 +81,12 @@
   }
 
   window.z = async function(){
-    if(!r.can()){
-      alert("Wait " + Math.ceil(r.left()/1000) + " seconds before trying again.");
+    if(!rateLimit.can()){
+      alert("Wait " + Math.ceil(rateLimit.left()/1000) + " seconds before trying again.");
       return;
     }
     const pw = prompt("Password:");
     if(!pw){ alert("Password required."); return; }
-    if(!await o(pw)){ alert("Wrong password."); return; }
     const t = document.getElementById("e").value;
     if(!t){ alert("Enter text to encrypt."); return; }
     try {
@@ -105,7 +95,8 @@
       const k = await j(pw, s);
       const d = new TextEncoder().encode(t);
       const enc = await crypto.subtle.encrypt({name:"AES-GCM", iv:i}, k, d);
-      const out = `SALT:${await v(s)}|IV:${await v(i)}|DATA:${await v(enc)}`;
+      const hash = await getHash(pw);
+      const out = `HASH:${hash}|SALT:${await v(s)}|IV:${await v(i)}|DATA:${await v(enc)}`;
       document.getElementById("f").innerText = out;
     } catch(e) {
       document.getElementById("f").innerText = "❌ Encryption error: " + e.message;
@@ -113,22 +104,28 @@
   };
 
   window.y = async function(){
-    if(!r.can()){
-      alert("Wait " + Math.ceil(r.left()/1000) + " seconds before trying again.");
+    if(!rateLimit.can()){
+      alert("Wait " + Math.ceil(rateLimit.left()/1000) + " seconds before trying again.");
       return;
     }
     const pw = prompt("Password:");
     if(!pw){ alert("Password required."); return; }
-    if(!await o(pw)){ alert("Wrong password."); return; }
     const t = document.getElementById("e").value.trim();
     if(!t){ alert("Enter text to decrypt."); return; }
     try {
       const p = t.split('|');
-      if(p.length !== 3) throw new Error("Wrong format.");
-      
-      const s1 = p[0].split(':')[1].trim(); // Added .trim()
-      const s2 = p[1].split(':')[1].trim(); // Added .trim()
-      const s3 = p[2].split(':')[1].trim(); // Added .trim()
+      if(p.length !== 4) throw new Error("Wrong format.");
+
+      const hashStored = p[0].split(':')[1].trim();
+      const s1 = p[1].split(':')[1].trim();
+      const s2 = p[2].split(':')[1].trim();
+      const s3 = p[3].split(':')[1].trim();
+
+      const hashEntered = await getHash(pw);
+      if (hashEntered !== hashStored) {
+        alert("Wrong password.");
+        return;
+      }
 
       const s = new Uint8Array(await g(s1));
       const i = new Uint8Array(await g(s2));
