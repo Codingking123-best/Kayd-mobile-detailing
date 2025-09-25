@@ -47,21 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const lightboxClose = document.getElementById('lightboxClose');
 
   document.querySelectorAll('.img-card').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const base = btn.getAttribute('data-base');
-      const candidates = [
-        `assets/images/optimized/${base}-1600.webp`,
-        `assets/images/optimized/${base}-1024.webp`,
-        `assets/images/optimized/${base}-1024.jpg`
-      ];
-      let chosen = '';
-      for (const url of candidates) {
-        try {
-          const res = await fetch(url, { method: 'HEAD' });
-          if (res.ok) { chosen = url; break; }
-        } catch (e) {}
-      }
-      lightboxImg.src = chosen || `assets/images/optimized/${base}-1024.jpg`;
+    btn.addEventListener('click', () => {
+      const src = btn.getAttribute('data-src');
+      lightboxImg.src = src;
       lightboxImg.alt = btn.querySelector('img').alt || 'Gallery image';
       lightbox.classList.add('open');
       lightbox.setAttribute('aria-hidden', 'false');
