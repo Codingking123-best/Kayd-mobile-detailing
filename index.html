@@ -1,1 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MAK's Mobile Details</title>
+  <meta name="description" content="Mobile car detailing that comes to you. Ceramic coatings, interior deep clean, wash and wax. Serving your area." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/images/optimized/logo-64.webp" type="image/webp" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#home">
+        <picture>
+          <source type="image/webp" srcset="assets/images/optimized/logo-64.webp 64w, assets/images/optimized/logo-128.webp 128w" sizes="64px">
+          <img src="assets/images/optimized/logo-128.jpg" alt="MAK'S MOBILE DETAILS logo" class="logo-img">
+        </picture>
+      </a>
+      <button id="navToggle" class="nav-toggle" aria-label="Toggle navigation">☰</button>
+      <nav id="siteNav" class="nav">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact" class="btn btn-primary">Book Now</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-content">
+          <h1>MAK's Mobile Details</h1>
+          <p class="lead">Premium mobile car detailing that comes to your home or workplace. Fast. Reliable. Professional.</p>
+          <div class="hero-ctas">
+            <a href="#contact" class="btn btn-primary">Request a Quote</a>
+            <a href="tel:+15551234567" class="btn btn-outline">Call Now</a>
+          </div>
+          <ul class="features">
+            <li>On‑site detailing</li>
+            <li>Eco friendly products</li>
+            <li>Pickup and fleet service available</li>
+          </ul>
+        </div>
+        <div class="hero-image" aria-hidden="true">
+          <picture>
+            <source type="image/webp"
+              srcset="assets/images/optimized/hero-640.webp 640w, assets/images/optimized/hero-1024.webp 1024w, assets/images/optimized/hero-1600.webp 1600w"
+              sizes="(max-width:600px) 100vw, 600px">
+            <source type="image/jpeg"
+              srcset="assets/images/optimized/hero-1024.jpg 1024w"
+              sizes="(max-width:600px) 100vw, 600px">
+            <img src="assets/images/optimized/hero-1024.jpg" alt="Front interior showing dashboard and seats" class="hero-photo" loading="lazy">
+          </picture>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="container">
+        <h2>Services</h2>
+        <p class="section-sub">Choose a service that fits your vehicle and schedule.</p>
+        <div class="cards">
+          <article class="card">
+            <h3>Exterior Wash & Wax</h3>
+            <p>Hand wash, clay bar, and high‑quality wax for a durable shine.</p>
+          </article>
+          <article class="card">
+            <h3>Interior Deep Clean</h3>
+            <p>Steam cleaning, upholstery shampoo, leather conditioning, and odor removal.</p>
+          </article>
+          <article class="card">
+            <h3>Ceramic Coating</h3>
+            <p>Long‑lasting protection against UV, dirt, and water spots. Includes prep and cure instructions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="section alt">
+      <div class="container">
+        <h2>Before and After Gallery</h2>
+        <p class="section-sub">Examples from recent mobile details.</p>
+        <div class="gallery-grid">
+          <button class="img-card" data-base="door1" aria-label="Open image door1">
+            <img src="assets/images/optimized/door1-320.webp" alt="Driver side door panel with armrest and storage" loading="lazy">
+          </button>
+          <button class="img-card" data-base="door2" aria-label="Open image door2">
+            <img src="assets/images/optimized/door2-320.webp" alt="Driver side door panel with speaker and wear" loading="lazy">
+          </button>
+          <button class="img-card" data-base="hero" aria-label="Open image interior">
+            <img src="assets/images/optimized/hero-320.webp" alt="Front interior showing dashboard and seats" loading="lazy">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <div class="container">
+        <h2>Pricing</h2>
+        <p class="section-sub">Transparent pricing by vehicle size. Exact quotes provided after inspection.</p>
+        <div class="pricing-grid">
+          <div class="price">
+            <h4>Compact</h4>
+            <div class="amount">$70</div>
+            <p>Exterior wash, interior vacuum, windows, and dressing.</p>
+          </div>
+          <div class="price">
+            <h4>Sedan / SUV</h4>
+            <div class="amount">$95</div>
+            <p>Full exterior & interior detail, clay bar, and wax option.</p>
+          </div>
+          <div class="price">
+            <h4>Truck / Large SUV</h4>
+            <div class="amount">$130</div>
+            <p>Extra space and larger surface area; includes wheel and tire deep clean.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section">
+      <div class="container">
+        <h2>What Customers Say</h2>
+        <div class="testimonials">
+          <blockquote class="testimonial">"MAK's brought my truck back to life. On time and professional." — Sarah R.</blockquote>
+          <blockquote class="testimonial">"Best mobile detail I’ve used. Ceramic coating still looks great months later." — Mark T.</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+      <div class="container contact-grid">
+        <div class="contact-info">
+          <h2>Book a Detail</h2>
+          <p class="muted">Fast replies by phone or email. We come to you within the local area.</p>
+          <ul class="contact-list">
+            <li><strong>Phone</strong> <a href="tel:+15551234567">+1 (555) 123‑4567</a></li>
+            <li><strong>Email</strong> <a href="mailto:info@maksdetails.com">info@maksdetails.com</a></li>
+            <li><strong>Service Area</strong> Show Low and surrounding towns</li>
+          </ul>
+          <div class="map-placeholder">Google Maps Embed Here</div>
+        </div>
+
+        <form id="contactForm" class="contact-form" action="#" novalidate>
+          <label>
+            Name
+            <input type="text" name="name" id="name" required />
+          </label>
+          <label>
+            Phone
+            <input type="tel" name="phone" id="phone" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" id="email" required />
+          </label>
+          <label>
+            Service Requested
+            <select name="service" id="service">
+              <option>Exterior Wash & Wax</option>
+              <option>Interior Deep Clean</option>
+              <option>Ceramic Coating</option>
+              <option>Fleet Service</option>
+            </select>
+          </label>
+          <label>
+            Preferred Date and Time
+            <input type="text" name="when" id="when" placeholder="e.g. Fri 10/3 morning" />
+          </label>
+          <label>
+            Notes
+            <textarea name="notes" id="notes" rows="4" placeholder="Any additional info"></textarea>
+          </label>
+
+          <button type="submit" class="btn btn-primary">Send Request</button>
+          <p class="form-help">This form will open your email client with the details. For automated booking, integrate a backend later.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© <span id="year"></span> MAK's Mobile Details</div>
+      <div class="footer-logo">
+        <picture>
+          <source type="image/webp" srcset="assets/images/optimized/logo-64.webp 64w, assets/images/optimized/logo-128.webp 128w">
+          <img src="assets/images/optimized/logo-128.jpg" alt="MAK'S MOBILE DETAILS logo" class="footer-logo-img">
+        </picture>
+      </div>
+    </div>
+  </footer>
+
+  <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog">
+    <button id="lightboxClose" class="lightbox-close" aria-label="Close">✕</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
 
