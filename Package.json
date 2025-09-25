@@ -1,0 +1,10 @@
+{
+  "name": "maks-images",
+  "version": "1.0.0",
+  "scripts": {
+    "convert-images": "node convert-images.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.32.0"
+  }
+}
